@@ -18,8 +18,9 @@ def detect_type(column, null_values=('null', None), types=(float, str)):
 
 def load_csv(filename):
     with open(filename) as f:
-        rows = [row.split(',') for row in f.read().split('\n')]
-        return rows.pop(0), rows, [[row[i] for row in rows] for i in range(len(rows))]
+        rows = [row.split(',') for row in f.read().split('\n')][:-1]
+        headers = rows.pop(0)
+        return headers, rows, [[row[i] for row in rows] for i in range(len(headers))]
 
 
 def get_column_stat(column: list, type_, null_values=('null', None)):
