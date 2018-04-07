@@ -46,10 +46,10 @@ def get_column_stat(column: list, type_, null_values=('null', None)):
 
 
 def main():
-    headers, data = load_csv('data/boxes.csv')
-    for header, row in zip(headers, data):
+    headers, rows, columns = load_csv('data/boxes.csv')
+    for header, col in zip(headers, columns):
         print(header)
-        pprint.pprint(get_column_stat(row, detect_type(row)))
+        pprint.pprint(get_column_stat(col, detect_type(col)))
 
 
 if __name__ == '__main__':
