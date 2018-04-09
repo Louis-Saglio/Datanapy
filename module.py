@@ -23,6 +23,11 @@ def detect_type(column, null_values=('null', None), types=(float, str)):
     return types[0]
 
 
+def get_mean_divergence(data):
+    data = sorted(data)
+    return statistics.mean([abs(data[i-1] - data[i]) for i in range(len(data)-1)])
+
+
 def load_csv(filename):
     with open(filename) as f:
         rows = [row.split(',') for row in f.read().split('\n')][:-1]
@@ -42,14 +47,11 @@ def get_column_stat(column: list, type_, null_values=('null', None)):
         for cell in column:
             assert isinstance(cell, type_), cell
         rep['mean'] = statistics.mean(column)
-        try:
-            rep['harmonic_mean'] = statistics.harmonic_mean(column)
-        except statistics.StatisticsError:
-            rep['harmonic_mean'] = None
         rep['max'] = max(column)
         rep['min'] = min(column)
         rep['median'] = statistics.median(column)
         rep['std_dev'] = statistics.pstdev(column)
+        rep['mean_gap'] = get_mean_divergence(column)
         try:
             rep['most_frequent'] = statistics.mode(column)
         except statistics.StatisticsError:
@@ -69,3 +71,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # headers, rows, columns = load_csv('data/boxes.csv')
+    # print(columns[0])
+    # print(get_mean_divergence(columns[0]))
